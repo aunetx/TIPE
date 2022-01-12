@@ -7,8 +7,8 @@ t = 2000
 X = np.zeros((t, n))
 Y = np.zeros((t, n))
 
-# X[0] = np.random.randn(n)
-# Y[0] = np.random.randn(n)
+#X[0] = np.random.randn(n)
+#Y[0] = np.random.randn(n)
 
 # X = tableau des positions en x des particules pour chaque temps
 

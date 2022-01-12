@@ -62,8 +62,9 @@ cax = ax.matshow(
 fig.colorbar(cax)
 
 for t in range(T):
+    plt.cla()
     cax = ax.matshow(
         correction(liste_grilles[t]), vmin=0, vmax=correction(max_particules), cmap=cmap)
 
     plt.draw()
-    plt.pause(0.001)
+    plt.pause(0.1)
