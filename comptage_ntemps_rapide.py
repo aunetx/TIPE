@@ -32,23 +32,35 @@ Affichage avec matplotlib
 """
 
 fig = plt.figure(figsize=(res, res))
-ax = fig.add_subplot(111)
+ax = plt.axes()
 plt.axis('equal')
 
 max_particules = max([np.amax(heatmap) for heatmap in heatmaps])
-norm = plt.Normalize(vmin=0, vmax=max_particules)
 
 ax.set_xlim(np.amin(X), np.amax(X))
 ax.set_ylim(np.amin(Y), np.amax(Y))
-#sc = ax.scatter(X[dt], Y[dt], s=0.1)
-im = ax.imshow(heatmaps[dt].T, extent=extents[dt],
+sc = ax.scatter(X[0], Y[0], s=0.1)
+im = ax.imshow(np.log10(heatmaps[0].T), extent=extents[0],
                origin='lower', cmap='gist_yarg')
 plt.colorbar(im)
 
-for dt in range(1, t):
-    #sc.set_offsets(np.c_[X[dt], Y[dt]])
-    im.set_data(heatmaps[dt].T)
-    im.set_extent(extents[dt])
 
-    fig.canvas.draw_idle()
-    plt.pause(0.05)
+def init():
+    sc.set_offsets(np.c_[X[0], Y[0]])
+    im.set_data(heatmaps[0].T)
+    im.set_extent(extents[0])
+    return [sc, im]
+
+
+def update(i, sc, im, heatmaps, extents, X, Y):
+    sc.set_offsets(np.c_[X[i], Y[i]])
+    im.set_data(np.log10(heatmaps[i].T))
+    im.set_extent(extents[i])
+    return [sc, im]
+
+
+anim = animation.FuncAnimation(
+    fig, update, init_func=init, fargs=(
+        sc, im, heatmaps, extents, X, Y), interval=1, frames=t,
+    blit=True, repeat=False)
+plt.show()
